@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
   },
   input: {
     borderStyle: "solid",
-    borderWidth: 2,
+    borderWidth: 1,
+    borderRadius: 16,
+    paddingHorizontal: 8,
     width: 200,
   }
 });

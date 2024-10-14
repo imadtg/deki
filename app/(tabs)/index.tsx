@@ -19,7 +19,7 @@ export default function HomeScreen() {
           </View>
         ))
       ) : (
-        <Text> All done! </Text>
+        <Text style={styles.splash}> All done! </Text>
       )}
     </View>
   );
@@ -49,5 +49,10 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  splash: {
+    width: 200,
+    textAlign: "center",
+    fontSize: 30,
   }
 });

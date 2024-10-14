@@ -29,6 +29,16 @@ export const useTasks = create<TasksState & TasksAction>()(
         set(({ tasks }: TasksState) => ({
           tasks: tasks.filter(({ id }) => id !== taskId),
         })),
+      rotateTask: (taskId: string) =>
+        set(({ tasks }: TasksState) => {
+          let task = tasks.find(({ id }) => id === taskId);
+          if (typeof task === "undefined") {
+            throw new Error("Task not found");
+          }
+          return {
+            tasks: [...tasks.filter(({ id }) => id !== taskId), task],
+          };
+        }),
     }),
     {
       name: "tasks",

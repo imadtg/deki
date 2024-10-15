@@ -15,6 +15,7 @@ interface TasksState {
 interface TasksAction {
   addTask: (task: string) => void;
   removeTask: (taskId: string) => void;
+  rotateTask: (taskId: string) => void;
 }
 
 export const useTasks = create<TasksState & TasksAction>()(

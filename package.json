@@ -36,7 +36,9 @@
     "react-native-web": "~0.19.10",
     "zustand": "^5.0.0-rc.2",
     "expo-crypto": "~13.0.2",
-    "@react-native-async-storage/async-storage": "1.23.1"
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "expo-dev-client": "~4.0.28",
+    "expo-updates": "~0.25.27"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

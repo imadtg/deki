@@ -13,8 +13,8 @@ export default function HomeScreen() {
           <View key={id} style={styles.line}>
             <Text style={styles.task}>{content}</Text>
             <View style={styles.buttons}>
-              <Button title="Finished" onPress={() => removeTask(id)} />
-              <Button title="Done for today" onPress={() => rotateTask(id)} />
+              <Button title="Finish" onPress={() => removeTask(id)} />
+              <Button title="Continue later" onPress={() => rotateTask(id)} />
             </View>
           </View>
         ))

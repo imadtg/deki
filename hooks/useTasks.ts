@@ -2,6 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
+/*import AppStorage from "../appwrite/sync-client"*/
+
 
 interface Task {
   id: string;
@@ -43,7 +45,7 @@ export const useTasks = create<TasksState & TasksAction>()(
     }),
     {
       name: "tasks",
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => /*AppStorage*/ AsyncStorage),
     }
   )
 );

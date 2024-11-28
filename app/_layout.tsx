@@ -1,9 +1,14 @@
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
+import React from "react";
+import Header from "@/components/Header";
+import { StatusBar } from "react-native";
 
-export default function RootLayout() {
+export default function HomeLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <>
+      <StatusBar />
+      <Header />
+      <Slot />
+    </>
   );
 }

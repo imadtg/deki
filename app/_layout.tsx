@@ -6,8 +6,7 @@ import { StatusBar } from "react-native";
 export default function HomeLayout() {
   return (
     <>
-      <StatusBar />
-      <Header />
+      <Header style={{ paddingTop: StatusBar.currentHeight || 0}}/>
       <Slot />
     </>
   );

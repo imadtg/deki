@@ -1,26 +1,59 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import * as Crypto from "expo-crypto";
-import { Account } from "react-native-appwrite";
-import account from "@/appwrite/auth-client";
+import React from "react";
+import { Models, ID, Client, Account } from "react-native-appwrite";
 
-interface AccountState {
-    account: Account;
-}
+// TODO: move these to env
+const client = new Client()
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject('6718b673002ee69ce115'); 
 
-interface AccountActions {
+const account = new Account(client);
 
-}
+export default function useAccount() {
+  const [accountInfo, setAccountInfo] =
+    React.useState<Models.User<Models.Preferences>>();
 
-export const useAccount = create<AccountState & AccountActions>()(
-  persist(
-    (set) => ({
-      account,
-    }),
-    {
-      name: "account",
-      storage: createJSONStorage(() => AsyncStorage),
+  async function getInfo() {
+    try {
+      const info = await account.get();
+      console.log("logged in as:", info.name);
+      setAccountInfo(info);
+    } catch (e) {
+      console.log("couldn't get account info:", e);
+      setAccountInfo(undefined);
     }
-  )
-);
+  }
+
+  React.useEffect(() => {
+    getInfo();
+  }, []);
+
+  async function signup(email: string, password: string, name: string) {
+    try {
+      await account.create(ID.unique(), email, password, name);
+    } catch (e) {
+      console.log("error in signup:", e);
+    }
+  }
+
+  async function login(email: string, password: string) {
+    try {
+      await account.createEmailPasswordSession(email, password);
+      getInfo();
+    } catch (e) {
+      console.log("error in login:", e);
+    }
+  }
+
+  async function logout() {
+    try {
+      if (accountInfo) {
+        await account.deleteSessions();
+        getInfo();
+      }
+    } catch (e) {
+      console.log("error in logout:", e);
+    }
+  }
+
+  return {accountInfo, signup, login, logout};
+}

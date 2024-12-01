@@ -1,62 +1,14 @@
 import React from "react";
 import { View, Text, Button, TextInput } from "react-native";
 
-import { Models, Account, ID } from "react-native-appwrite";
-import client from "@/appwrite/appwrite-client";
-
-const account = new Account(client);
+import useAccount from "@/hooks/useAccount";
 
 export default function Header({ ...delegated }) {
-  const [accountInfo, setAccountInfo] =
-    React.useState<Models.User<Models.Preferences>>();
+  const { accountInfo, login, logout, signup } = useAccount();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  async function getInfo() {
-    try {
-      const info = await account.get();
-      console.log("logged in as:", info.name);
-      setAccountInfo(info);
-    } catch (e) {
-      console.log("couldn't get account info:", e);
-      setAccountInfo(undefined);
-    }
-  }
-
-  React.useEffect(() => {
-    getInfo();
-    /*return client.subscribe("account", (payload) => {
-      console.log(payload);
-      getInfo();
-    });*/
-  }, []);
-
-  async function signup() {
-    try {
-      await account.create(ID.unique(), email, password, name);
-    } catch (e) {
-      console.log("error in signup:", e);
-    }
-  }
-  async function login() {
-    try {
-      await account.createEmailPasswordSession(email, password);
-      getInfo();
-    } catch (e) {
-      console.log("error in login:", e);
-    }
-  }
-  async function logout() {
-    try {
-      if (accountInfo) {
-        await account.deleteSessions();
-        getInfo();
-      }
-    } catch (e) {
-      console.log("error in logout:", e);
-    }
-  }
   return (
     <View {...delegated}>
       {accountInfo ? (
@@ -90,8 +42,8 @@ export default function Header({ ...delegated }) {
         underlineColorAndroid="#f000"
         value={password}
       />
-      <Button title="signup" onPress={signup} />
-      <Button title="login" onPress={login} />
+      <Button title="signup" onPress={() => signup(email, password, name)} />
+      <Button title="login" onPress={() => login(email, password)} />
       <Button title="logout" onPress={logout} />
     </View>
   );

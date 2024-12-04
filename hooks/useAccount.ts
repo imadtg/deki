@@ -1,10 +1,11 @@
 import React from "react";
 import { Models, ID, Client, Account } from "react-native-appwrite";
+import { useTasks } from "./useTasks";
 
 // TODO: move these to env
 const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('6718b673002ee69ce115'); 
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject("6718b673002ee69ce115");
 
 const account = new Account(client);
 
@@ -21,6 +22,8 @@ export default function useAccount() {
       console.log("couldn't get account info:", e);
       setAccountInfo(undefined);
     }
+    // TODO: find a better way to handle this
+    useTasks.persist.rehydrate();
   }
 
   React.useEffect(() => {
@@ -48,6 +51,7 @@ export default function useAccount() {
     try {
       if (accountInfo) {
         await account.deleteSessions();
+        useTasks.getState().resetTasks();
         getInfo();
       }
     } catch (e) {
@@ -55,5 +59,5 @@ export default function useAccount() {
     }
   }
 
-  return {accountInfo, signup, login, logout};
+  return { accountInfo, signup, login, logout };
 }

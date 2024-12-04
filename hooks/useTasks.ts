@@ -17,12 +17,17 @@ interface TasksAction {
   addTask: (task: string) => void;
   removeTask: (taskId: string) => void;
   rotateTask: (taskId: string) => void;
+  resetTasks: () => void;
 }
+
+const initialTaskState = {
+  tasks: [],
+};
 
 export const useTasks = create<TasksState & TasksAction>()(
   persist(
     (set) => ({
-      tasks: [],
+      ...initialTaskState,
       addTask: (task: string) =>
         set(({ tasks }: TasksState) => ({
           tasks: [...tasks, { content: task, id: Crypto.randomUUID() }],
@@ -41,10 +46,12 @@ export const useTasks = create<TasksState & TasksAction>()(
             tasks: [...tasks.filter(({ id }) => id !== taskId), task],
           };
         }),
+      resetTasks: () => set(initialTaskState),
     }),
     {
       name: "tasks",
       storage: createJSONStorage(() => AppStorage),
+      merge: (persisted, current) => ({ ...current, ...persisted }),
     }
   )
 );

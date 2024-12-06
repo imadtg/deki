@@ -29,6 +29,10 @@ async function getUserId() {
   }
 }
 
+
+// FIXME: more durable persistence is needed...
+// i'm assuming the user won't just switch accounts after logging in
+// this should still work if logging in the first time, but i haven't done much to ensure it will always work...
 const AppwriteStorage: StateStorage = {
   async getItem(name) {
     console.log("getting", name);
@@ -86,6 +90,9 @@ const AppwriteStorage: StateStorage = {
   },
 };
 
+
+// TODO: this should be exported after online support is added instead of AppwriteStorage
+// it can use AppwriteStorage but a more composable API is desired...
 const AppStorage: StateStorage = {
   async getItem(name) {
     return null;

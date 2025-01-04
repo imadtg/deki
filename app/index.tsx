@@ -1,11 +1,35 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useTasks } from "@/hooks/useTasks";
 
+import { MMKV } from 'react-native-mmkv';
+
+// Initialize MMKV instance
+const mmkv = new MMKV({
+  id: 'zustand-mmkv-storage', // Unique ID for MMKV instance
+  encryptionKey: 'your-encryption-key', // Optional encryption
+  path: '/path/to/shared/storage', // Optional: Set custom shared path
+});
+
+// MMKV adapter for Zustand persist
+export const mmkvStorage = {
+  getItem: (key) => {
+    const value = mmkv.getString(key);
+    return value ? JSON.parse(value) : null;
+  },
+  setItem: (key, value) => {
+    mmkv.set(key, JSON.stringify(value));
+  },
+  removeItem: (key) => {
+    mmkv.delete(key);
+  },
+};
+
+
 export default function HomeScreen() {
   const tasks = useTasks(({ tasks }) => tasks);
   const removeTask = useTasks((state) => state.removeTask);
   const rotateTask = useTasks((state) => state.rotateTask);
-  const shownTasks = tasks.slice(0, 4);
+  const shownTasks = tasks.slice(0, 1); // i have to fight the decision fatigue
   return (
     <View style={styles.container}>
       {shownTasks.length > 0 ? (

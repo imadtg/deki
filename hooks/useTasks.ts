@@ -4,6 +4,8 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
 import AppStorage from "./sync-client";
 
+import SQLiteStorage from "./sqlite-storage";
+
 interface Task {
   id: string;
   content: string;
@@ -50,8 +52,8 @@ export const useTasks = create<TasksState & TasksAction>()(
     }),
     {
       name: "tasks",
-      storage: createJSONStorage(() => AppStorage),
-      merge: (persisted, current) => ({ ...current, ...persisted }),
+      storage: SQLiteStorage,
+      //merge: (persisted, current) => ({ ...current, ...persisted }),
     }
   )
 );

@@ -2,13 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as Crypto from "expo-crypto";
-import AppStorage from "./sync-client";
-
-import SQLiteStorage from "./sqlite-storage";
 
 interface Task {
   id: string;
   content: string;
+  lastInteractionTime: number;
 }
 
 interface TasksState {
@@ -20,6 +18,8 @@ interface TasksAction {
   removeTask: (taskId: string) => void;
   rotateTask: (taskId: string) => void;
   resetTasks: () => void;
+  mergeFromJSON: (json: string) => void;
+  loadFromJSON: (json: string) => void;
 }
 
 const initialTaskState = {
@@ -32,7 +32,14 @@ export const useTasks = create<TasksState & TasksAction>()(
       ...initialTaskState,
       addTask: (task: string) =>
         set(({ tasks }: TasksState) => ({
-          tasks: [...tasks, { content: task, id: Crypto.randomUUID() }],
+          tasks: [
+            ...tasks,
+            {
+              content: task,
+              id: Crypto.randomUUID(),
+              lastInteractionTime: Date.now(),
+            },
+          ],
         })),
       removeTask: (taskId: string) =>
         set(({ tasks }: TasksState) => ({
@@ -45,14 +52,23 @@ export const useTasks = create<TasksState & TasksAction>()(
             throw new Error("Task not found");
           }
           return {
-            tasks: [...tasks.filter(({ id }) => id !== taskId), task],
+            tasks: [
+              ...tasks.filter(({ id }) => id !== taskId),
+              { ...task, lastInteractionTime: Date.now() },
+            ],
           };
         }),
       resetTasks: () => set(initialTaskState),
+      mergeFromJSON: (json) => set(JSON.parse(json), false),
+      loadFromJSON: (json) => {
+        set(initialTaskState);
+        console.log(JSON.parse(json))
+        set(JSON.parse(json));
+      },
     }),
     {
       name: "tasks",
-      storage: SQLiteStorage,
+      storage: createJSONStorage(() => AsyncStorage),
       //merge: (persisted, current) => ({ ...current, ...persisted }),
     }
   )

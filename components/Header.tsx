@@ -1,18 +1,18 @@
 import React from "react";
 import { View, Text, Button, TextInput, Modal } from "react-native";
 
-import AccountForm from "./AccountForm";
+import DataForm from "./DataForm";
 
 export default function Header({ ...delegated }) {
   const [showModal, setShowModal] = React.useState(false);
   return showModal ? (
     <Modal>
-      <AccountForm {...delegated} />
-      <Button onPress={() => setShowModal(false)} title="Hide account form" />
+      <DataForm {...delegated} />
+      <Button onPress={() => setShowModal(false)} title="Hide data form" />
     </Modal>
   ) : (
     <View>
-      <Button onPress={() => setShowModal(true)} title="Show account form" />
+      <Button onPress={() => setShowModal(true)} title="Show data form" />
     </View>
   );
 }

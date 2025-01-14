@@ -1,14 +1,12 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useTasks } from "@/hooks/useTasks";
 
-
-export default function HomeScreen() {
-  const {tasks, rotateTask, removeTask} = useTasks((state) => state);
-  const shownTasks = tasks.slice(0, 1); // i have to fight the decision fatigue
+export default function TaskList() {
+  const { tasks, rotateTask, removeTask } = useTasks((state) => state);
   return (
     <View style={styles.container}>
-      {shownTasks.length > 0 ? (
-        shownTasks.map(({ content, id }) => (
+      {tasks.length > 0 ? (
+        tasks.map(({ content, id }) => (
           <View key={id} style={styles.line}>
             <Text style={styles.task}>{content}</Text>
             <View style={styles.buttons}>
@@ -53,6 +51,5 @@ const styles = StyleSheet.create({
     width: 200,
     textAlign: "center",
     fontSize: 30,
-  }
+  },
 });
-

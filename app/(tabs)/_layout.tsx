@@ -4,8 +4,6 @@ import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useAccount from "@/hooks/useAccount";
-import { Models } from "react-native-appwrite";
 import Header from "@/components/Header";
 
 export default function TabLayout() {
@@ -13,7 +11,7 @@ export default function TabLayout() {
     <SafeAreaView style={styles.container}>
       <Tabs
         screenOptions={{
-          headerShown: false, //header: () => <Header />
+          header: () => <Header />
         }}
       >
         <Tabs.Screen

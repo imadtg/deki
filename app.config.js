@@ -73,4 +73,9 @@ export default {
   runtimeVersion: {
     policy: "appVersion",
   },
+  expo: {
+    android: {
+      permissions: ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+    },
+  },
 };

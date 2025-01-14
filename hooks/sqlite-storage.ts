@@ -1,21 +1,27 @@
 import * as SQLite from "expo-sqlite";
 import * as FileSystem from 'expo-file-system';
 import { createJSONStorage } from "zustand/middleware";
-import * as Permissions from 'expo-permissions';
+import { Platform } from "react-native";
 
-async function getPermissions (){
-  const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-  if (status !== 'granted') {
-    throw new Error("Permission not granted to access external storage.");
+const getSharedDbPath = async () => {
+  // Only works on Android
+  if (Platform.OS === 'android') {
+    const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+    if (permissions.granted) {
+      const dbName = 'deki_zustand_persist.db';
+      const dbPath = `${FileSystem.documentDirectory}SQLite/${dbName}`;
+      return dbPath;
+    }
   }
+  // Falls back to app-specific storage on iOS
+  return `${FileSystem.documentDirectory}SQLite/localdb.db`;
 };
 
 console.log(FileSystem.documentDirectory)
 
 const dbPromise = (async () => {
-  await getPermissions
   // Get a device-wide file path for the database (e.g., external storage on Android)
-  const dbPath = `${FileSystem.externalStorageDirectory}deki_zustand_persist.db`;
+  const dbPath = await getSharedDbPath();
   console.log('Database path:', dbPath);
 
   // Open the SQLite database at the specified location

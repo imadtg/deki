@@ -1,3 +1,4 @@
+/*
 import * as SQLite from "expo-sqlite";
 import * as FileSystem from 'expo-file-system';
 import { createJSONStorage } from "zustand/middleware";
@@ -89,3 +90,4 @@ const SQLiteStorage = createJSONStorage(() => ({
 }));
 
 export default SQLiteStorage;
+*/

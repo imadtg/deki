@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Button, TextInput, StyleSheet } from "react-native";
+import * as Clipboard from 'expo-clipboard';
 
 import { useTasks } from "@/hooks/useTasks";
 
@@ -7,6 +8,14 @@ export default function DataForm({ style = {}, ...delegated }) {
   const [data, setData] = React.useState("");
   const state = useTasks((state) => state);
   const { loadFromJSON } = state;
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(data);
+  };
+
+  const fetchCopiedText = async () => {
+    const text = await Clipboard.getStringAsync();
+    setData(text);
+  };
 
   return (
     <View {...delegated} style={{ ...styles.container, ...style }}>
@@ -19,6 +28,8 @@ export default function DataForm({ style = {}, ...delegated }) {
       />
       <Button title="get data" onPress={() => setData(JSON.stringify(state))} />
       <Button title="load data" onPress={() => loadFromJSON(data)} />
+      <Button title="copy" onPress={copyToClipboard} />
+      <Button title="paste" onPress={fetchCopiedText} />
     </View>
   );
 }

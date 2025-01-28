@@ -1,10 +1,10 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import { useTasks } from "@/hooks/useTasks";
 
 export default function TaskList() {
   const { tasks, rotateTask, removeTask } = useTasks((state) => state);
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {tasks.length > 0 ? (
         tasks.map(({ content, id }) => (
           <View key={id} style={styles.line}>
@@ -18,7 +18,7 @@ export default function TaskList() {
       ) : (
         <Text style={styles.splash}> All done! </Text>
       )}
-    </View>
+    </ScrollView>
   );
 }
 

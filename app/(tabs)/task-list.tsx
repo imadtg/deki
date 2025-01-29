@@ -4,7 +4,10 @@ import { useTasks } from "@/hooks/useTasks";
 export default function TaskList() {
   const { tasks, rotateTask, removeTask } = useTasks((state) => state);
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView 
+      contentContainerStyle={styles.container}
+      style={styles.scrollView} // Add this
+    >
       {tasks.length > 0 ? (
         tasks.map(({ content, id }) => (
           <View key={id} style={styles.line}>
@@ -23,12 +26,15 @@ export default function TaskList() {
 }
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1, // Takes full height from parent
+  },
   container: {
-    justifyContent: "center",
+    justifyContent: "flex-start", // Changed from "center"
     alignItems: "center",
     gap: 30,
-    padding: "50%",
-    height: "100%",
+    padding: 20, // Reduced from 50%
+    flexGrow: 1, // Allows content to expand
   },
   task: {
     textAlign: "center",
